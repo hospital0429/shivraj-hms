@@ -3,267 +3,191 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shivraj Hospital HMS</title>
+  <title>Shivraj Hospital HMS - Full Integrated System</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    body {
-      background: #f4f7fb;
-      font-family: Arial, sans-serif;
-      overflow-x: hidden;
+    body{background:#f4f7fb;font-family:Arial;}
+
+    #loginPage{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(45deg,#0d6efd,#003b8f);
     }
 
-    .sidebar {
-      width: 250px;
-      height: 100vh;
-      background: linear-gradient(180deg,#0d6efd,#003b8f);
-      position: fixed;
-      padding-top: 20px;
-      color: white;
+    .login-box{
+      background:white;
+      padding:40px;
+      border-radius:20px;
+      width:350px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.2);
     }
 
-    .sidebar h2 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-weight: bold;
+    .sidebar{
+      width:250px;
+      height:100vh;
+      background:#0d6efd;
+      position:fixed;
+      color:white;
+      padding-top:20px;
     }
 
-    .sidebar a {
-      display: block;
-      color: white;
-      text-decoration: none;
-      padding: 14px 25px;
-      margin: 5px 10px;
-      border-radius: 10px;
-      transition: 0.3s;
+    .sidebar a{
+      display:block;
+      color:white;
+      text-decoration:none;
+      padding:12px 20px;
+      margin:5px;
+      border-radius:10px;
     }
 
-    .sidebar a:hover {
-      background: rgba(255,255,255,0.2);
-    }
+    .sidebar a:hover{background:rgba(255,255,255,0.2);}
 
-    .main {
-      margin-left: 260px;
-      padding: 25px;
-    }
+    .main{margin-left:260px;padding:20px;}
 
-    .topbar {
-      background: white;
-      padding: 15px 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-      margin-bottom: 25px;
-    }
+    .card-box{background:white;padding:20px;border-radius:15px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
 
-    .card-box {
-      border-radius: 20px;
-      color: white;
-      padding: 25px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    }
-
-    .bg1 { background: linear-gradient(45deg,#0d6efd,#4e9bff); }
-    .bg2 { background: linear-gradient(45deg,#198754,#5ec58a); }
-    .bg3 { background: linear-gradient(45deg,#dc3545,#ff6b7d); }
-    .bg4 { background: linear-gradient(45deg,#fd7e14,#ffb067); }
-
-    .section-card {
-      background: white;
-      border-radius: 20px;
-      padding: 25px;
-      margin-top: 25px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    }
-
-    table {
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-    .token-screen {
-      background: black;
-      color: #00ff66;
-      padding: 25px;
-      border-radius: 20px;
-      text-align: center;
-      font-size: 30px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-
-    @media(max-width:768px){
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-      }
-
-      .main {
-        margin-left: 0;
-      }
-    }
+    .hidden{display:none;}
   </style>
 </head>
 <body>
 
-<div class="sidebar">
-  <h2>Shivraj HMS</h2>
+<!-- LOGIN PAGE -->
+<div id="loginPage">
+  <div class="login-box">
+    <h3 class="text-center">Hospital Login</h3>
+    <input id="user" class="form-control mt-3" placeholder="Username">
+    <input id="pass" type="password" class="form-control mt-2" placeholder="Password">
+    <button class="btn btn-primary w-100 mt-3" onclick="login()">Login</button>
+  </div>
+</div>
 
-  <a href="#">Dashboard</a>
-  <a href="#">Patient Registration</a>
-  <a href="#">Insurance</a>
-  <a href="#">Billing</a>
-  <a href="#">Reports</a>
-  <a href="#">Queue System</a>
-  <a href="#">Settings</a>
+<!-- MAIN SYSTEM -->
+<div id="mainApp" class="hidden">
+
+<div class="sidebar">
+  <h4 class="text-center">Shivraj HMS</h4>
+  <a onclick="show('dash')">Dashboard</a>
+  <a onclick="show('patient')">Patient</a>
+  <a onclick="show('billing')">Billing</a>
+  <a onclick="show('inventory')">Inventory</a>
+  <a onclick="show('insurance')">Insurance</a>
+  <a onclick="show('queue')">Queue</a>
 </div>
 
 <div class="main">
 
-  <div class="topbar d-flex justify-content-between align-items-center">
-    <div>
-      <h3>Hospital Insurance Management System</h3>
-      <small>Web Version Dashboard</small>
-    </div>
-
-    <button class="btn btn-primary">Admin Login</button>
+<!-- DASHBOARD -->
+<div id="dash">
+  <h3>Dashboard</h3>
+  <div class="row g-3">
+    <div class="col-md-3"><div class="card-box">Patients: 152</div></div>
+    <div class="col-md-3"><div class="card-box">Bills: 85</div></div>
+    <div class="col-md-3"><div class="card-box">Inventory Items: 120</div></div>
+    <div class="col-md-3"><div class="card-box">Revenue: Rs 2.5L</div></div>
   </div>
+</div>
 
-  <div class="row g-4">
+<!-- PATIENT -->
+<div id="patient" class="hidden">
+  <h3>Patient Registration</h3>
+  <input class="form-control mt-2" placeholder="Name">
+  <input class="form-control mt-2" placeholder="Phone">
+  <button class="btn btn-success mt-2">Register</button>
+</div>
 
-    <div class="col-md-3">
-      <div class="card-box bg1">
-        <h5>Today's Patients</h5>
-        <h1>152</h1>
-      </div>
-    </div>
+<!-- BILLING -->
+<div id="billing" class="hidden">
+  <h3>Billing System</h3>
+  <input id="item" class="form-control mt-2" placeholder="Item Name">
+  <input id="price" class="form-control mt-2" placeholder="Price">
+  <button class="btn btn-primary mt-2" onclick="addBill()">Add Bill</button>
 
-    <div class="col-md-3">
-      <div class="card-box bg2">
-        <h5>Insurance Claims</h5>
-        <h1>43</h1>
-      </div>
-    </div>
+  <h5 class="mt-3">Bill Items</h5>
+  <ul id="billList"></ul>
+  <h4>Total: Rs <span id="total">0</span></h4>
+</div>
 
-    <div class="col-md-3">
-      <div class="card-box bg3">
-        <h5>Pending Claims</h5>
-        <h1>18</h1>
-      </div>
-    </div>
+<!-- INVENTORY -->
+<div id="inventory" class="hidden">
+  <h3>Inventory System</h3>
+  <input id="itemName" class="form-control mt-2" placeholder="Medicine Name">
+  <input id="stock" class="form-control mt-2" placeholder="Stock">
+  <button class="btn btn-warning mt-2" onclick="addStock()">Add Stock</button>
 
-    <div class="col-md-3">
-      <div class="card-box bg4">
-        <h5>Total Revenue</h5>
-        <h1>Rs. 2.5L</h1>
-      </div>
-    </div>
+  <table class="table mt-3">
+    <thead><tr><th>Name</th><th>Stock</th></tr></thead>
+    <tbody id="stockTable"></tbody>
+  </table>
+</div>
 
+<!-- INSURANCE -->
+<div id="insurance" class="hidden">
+  <h3>Insurance Module</h3>
+  <p>Claims & Approval System Ready</p>
+</div>
+
+<!-- QUEUE -->
+<div id="queue" class="hidden">
+  <h3>Queue System</h3>
+  <div class="card-box text-center" style="font-size:30px">
+    TOKEN: A-101 | COUNTER: 2
   </div>
+</div>
 
-  <div class="section-card">
-    <h4>Patient Registration</h4>
-
-    <div class="row mt-3">
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Patient Name">
-      </div>
-
-      <div class="col-md-3">
-        <input type="text" class="form-control" placeholder="Phone Number">
-      </div>
-
-      <div class="col-md-3">
-        <select class="form-select">
-          <option>Insurance Company</option>
-          <option>Nepal Health Insurance</option>
-          <option>SSF</option>
-          <option>NLIC</option>
-        </select>
-      </div>
-
-      <div class="col-md-2">
-        <button class="btn btn-success w-100">Register</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-card">
-    <h4>Insurance Claims Table</h4>
-
-    <div class="table-responsive mt-3">
-      <table class="table table-bordered table-hover">
-        <thead class="table-primary">
-          <tr>
-            <th>Patient</th>
-            <th>Policy No</th>
-            <th>Company</th>
-            <th>Status</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>Ram Sharma</td>
-            <td>POL12345</td>
-            <td>SSF</td>
-            <td><span class="badge bg-success">Approved</span></td>
-            <td>Rs. 15,000</td>
-          </tr>
-
-          <tr>
-            <td>Sita KC</td>
-            <td>POL77882</td>
-            <td>NLIC</td>
-            <td><span class="badge bg-warning">Pending</span></td>
-            <td>Rs. 22,000</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="section-card">
-    <h4>Queue Display</h4>
-
-    <div class="token-screen">
-      TOKEN NUMBER: A-102 <br>
-      COUNTER NUMBER: 3
-    </div>
-  </div>
-
-  <div class="section-card">
-    <h4>Daily Revenue Chart</h4>
-    <canvas id="chart"></canvas>
-  </div>
-
+</div>
 </div>
 
 <script>
-  const ctx = document.getElementById('chart');
+let total=0;
+let stocks=[];
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      datasets: [{
-        label: 'Revenue',
-        data: [12000, 19000, 15000, 22000, 30000, 26000, 18000],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
+function login(){
+  let u=document.getElementById('user').value;
+  let p=document.getElementById('pass').value;
+
+  if(u=="admin" && p=="admin"){
+    document.getElementById('loginPage').style.display="none";
+    document.getElementById('mainApp').classList.remove('hidden');
+  } else {
+    alert("Invalid Login");
+  }
+}
+
+function show(id){
+  document.querySelectorAll('.main > div').forEach(d=>d.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function addBill(){
+  let item=document.getElementById('item').value;
+  let price=parseInt(document.getElementById('price').value);
+
+  if(!item || !price) return;
+
+  total+=price;
+
+  let li=document.createElement('li');
+  li.innerText=item+" - Rs "+price;
+  document.getElementById('billList').appendChild(li);
+
+  document.getElementById('total').innerText=total;
+}
+
+function addStock(){
+  let name=document.getElementById('itemName').value;
+  let stock=document.getElementById('stock').value;
+
+  stocks.push({name,stock});
+
+  let row=document.createElement('tr');
+  row.innerHTML=`<td>${name}</td><td>${stock}</td>`;
+  document.getElementById('stockTable').appendChild(row);
+}
 </script>
 
 </body>
