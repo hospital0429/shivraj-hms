@@ -1,192 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shivraj Hospital HMS - Full Integrated System</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <style>
-    body{background:#f4f7fb;font-family:Arial;}
-
-    #loginPage{
-      height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:linear-gradient(45deg,#0d6efd,#003b8f);
-    }
-
-    .login-box{
-      background:white;
-      padding:40px;
-      border-radius:20px;
-      width:350px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.2);
-    }
-
-    .sidebar{
-      width:250px;
-      height:100vh;
-      background:#0d6efd;
-      position:fixed;
-      color:white;
-      padding-top:20px;
-    }
-
-    .sidebar a{
-      display:block;
-      color:white;
-      text-decoration:none;
-      padding:12px 20px;
-      margin:5px;
-      border-radius:10px;
-    }
-
-    .sidebar a:hover{background:rgba(255,255,255,0.2);}
-
-    .main{margin-left:260px;padding:20px;}
-
-    .card-box{background:white;padding:20px;border-radius:15px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-
-    .hidden{display:none;}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shivraj HMS</title>
+<style>
+body{font-family:Arial;background:#f4f6f9;margin:0}
+header{background:#0d6efd;color:white;padding:15px;text-align:center}
+.container{padding:20px}
+.card{background:white;padding:15px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1);margin-bottom:15px}
+input,button,select{padding:10px;margin:5px;width:100%}
+button{background:#0d6efd;color:white;border:none;cursor:pointer;border-radius:5px}
+button:hover{background:#084298}
+.nav{display:flex;gap:10px;flex-wrap:wrap}
+.nav button{flex:1}
+.hidden{display:none}
+</style>
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
-<div id="loginPage">
-  <div class="login-box">
-    <h3 class="text-center">Hospital Login</h3>
-    <input id="user" class="form-control mt-3" placeholder="Username">
-    <input id="pass" type="password" class="form-control mt-2" placeholder="Password">
-    <button class="btn btn-primary w-100 mt-3" onclick="login()">Login</button>
-  </div>
+<header>
+<h2>Shivraj Hospital Management System</h2>
+</header>
+
+<div class="container">
+
+<!-- LOGIN -->
+<div id="loginPage" class="card">
+<h3>Login</h3>
+<input id="user" placeholder="Username" />
+<input id="pass" type="password" placeholder="Password" />
+<button onclick="login()">Login</button>
+<p id="err" style="color:red"></p>
 </div>
-
-<!-- MAIN SYSTEM -->
-<div id="mainApp" class="hidden">
-
-<div class="sidebar">
-  <h4 class="text-center">Shivraj HMS</h4>
-  <a onclick="show('dash')">Dashboard</a>
-  <a onclick="show('patient')">Patient</a>
-  <a onclick="show('billing')">Billing</a>
-  <a onclick="show('inventory')">Inventory</a>
-  <a onclick="show('insurance')">Insurance</a>
-  <a onclick="show('queue')">Queue</a>
-</div>
-
-<div class="main">
 
 <!-- DASHBOARD -->
-<div id="dash">
-  <h3>Dashboard</h3>
-  <div class="row g-3">
-    <div class="col-md-3"><div class="card-box">Patients: 152</div></div>
-    <div class="col-md-3"><div class="card-box">Bills: 85</div></div>
-    <div class="col-md-3"><div class="card-box">Inventory Items: 120</div></div>
-    <div class="col-md-3"><div class="card-box">Revenue: Rs 2.5L</div></div>
-  </div>
-</div>
-
-<!-- PATIENT -->
-<div id="patient" class="hidden">
-  <h3>Patient Registration</h3>
-  <input class="form-control mt-2" placeholder="Name">
-  <input class="form-control mt-2" placeholder="Phone">
-  <button class="btn btn-success mt-2">Register</button>
+<div id="app" class="hidden">
+<div class="nav">
+<button onclick="show('billing')">Billing</button>
+<button onclick="show('inventory')">Inventory</button>
+<button onclick="show('token')">OPD Token</button>
+<button onclick="logout()">Logout</button>
 </div>
 
 <!-- BILLING -->
-<div id="billing" class="hidden">
-  <h3>Billing System</h3>
-  <input id="item" class="form-control mt-2" placeholder="Item Name">
-  <input id="price" class="form-control mt-2" placeholder="Price">
-  <button class="btn btn-primary mt-2" onclick="addBill()">Add Bill</button>
-
-  <h5 class="mt-3">Bill Items</h5>
-  <ul id="billList"></ul>
-  <h4>Total: Rs <span id="total">0</span></h4>
+<div id="billing" class="card">
+<h3>Billing System</h3>
+<input id="pname" placeholder="Patient Name" />
+<input id="amt" type="number" placeholder="Amount" />
+<button onclick="addBill()">Generate Bill</button>
+<div id="billList"></div>
 </div>
 
 <!-- INVENTORY -->
-<div id="inventory" class="hidden">
-  <h3>Inventory System</h3>
-  <input id="itemName" class="form-control mt-2" placeholder="Medicine Name">
-  <input id="stock" class="form-control mt-2" placeholder="Stock">
-  <button class="btn btn-warning mt-2" onclick="addStock()">Add Stock</button>
-
-  <table class="table mt-3">
-    <thead><tr><th>Name</th><th>Stock</th></tr></thead>
-    <tbody id="stockTable"></tbody>
-  </table>
+<div id="inventory" class="card hidden">
+<h3>Inventory</h3>
+<input id="item" placeholder="Item Name" />
+<input id="qty" type="number" placeholder="Quantity" />
+<button onclick="addItem()">Add Stock</button>
+<div id="stockList"></div>
 </div>
 
-<!-- INSURANCE -->
-<div id="insurance" class="hidden">
-  <h3>Insurance Module</h3>
-  <p>Claims & Approval System Ready</p>
-</div>
-
-<!-- QUEUE -->
-<div id="queue" class="hidden">
-  <h3>Queue System</h3>
-  <div class="card-box text-center" style="font-size:30px">
-    TOKEN: A-101 | COUNTER: 2
-  </div>
+<!-- TOKEN -->
+<div id="token" class="card hidden">
+<h3>OPD Token</h3>
+<select id="dept">
+<option>GENERAL OPD</option>
+<option>ANC OPD</option>
+<option>ENT</option>
+<option>DERMATOLOGY</option>
+<option>PEDIATRIC</option>
+<option>ORTHOPEDIC</option>
+<option>GYNE & OBS</option>
+<option>PSYCHIATRIC</option>
+</select>
+<button onclick="generateToken()">Generate Token</button>
+<div id="tokenOut"></div>
 </div>
 
 </div>
 </div>
 
 <script>
-let total=0;
-let stocks=[];
+let bills=[];
+let stock=[];
+let tokenNo=1;
 
 function login(){
-  let u=document.getElementById('user').value;
-  let p=document.getElementById('pass').value;
-
-  if(u=="admin" && p=="admin"){
-    document.getElementById('loginPage').style.display="none";
-    document.getElementById('mainApp').classList.remove('hidden');
-  } else {
-    alert("Invalid Login");
-  }
+let u=document.getElementById('user').value;
+let p=document.getElementById('pass').value;
+if(u==='admin' && p==='admin'){
+ document.getElementById('loginPage').classList.add('hidden');
+ document.getElementById('app').classList.remove('hidden');
+}else{
+ document.getElementById('err').innerText='Invalid login';
+}
 }
 
+function logout(){location.reload();}
+
 function show(id){
-  document.querySelectorAll('.main > div').forEach(d=>d.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
+document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
 }
 
 function addBill(){
-  let item=document.getElementById('item').value;
-  let price=parseInt(document.getElementById('price').value);
-
-  if(!item || !price) return;
-
-  total+=price;
-
-  let li=document.createElement('li');
-  li.innerText=item+" - Rs "+price;
-  document.getElementById('billList').appendChild(li);
-
-  document.getElementById('total').innerText=total;
+let n=document.getElementById('pname').value;
+let a=document.getElementById('amt').value;
+bills.push({n,a});
+renderBills();
 }
 
-function addStock(){
-  let name=document.getElementById('itemName').value;
-  let stock=document.getElementById('stock').value;
+function renderBills(){
+document.getElementById('billList').innerHTML=bills.map(b=>
+`<p>${b.n} - Rs ${b.a}</p>`).join('');
+}
 
-  stocks.push({name,stock});
+function addItem(){
+let i=document.getElementById('item').value;
+let q=document.getElementById('qty').value;
+stock.push({i,q});
+renderStock();
+}
 
-  let row=document.createElement('tr');
-  row.innerHTML=`<td>${name}</td><td>${stock}</td>`;
-  document.getElementById('stockTable').appendChild(row);
+function renderStock(){
+document.getElementById('stockList').innerHTML=stock.map(s=>
+`<p>${s.i} - ${s.q}</p>`).join('');
+}
+
+function generateToken(){
+let d=document.getElementById('dept').value;
+document.getElementById('tokenOut').innerHTML=
+`<h2>Token #${tokenNo++}</h2><p>${d}</p><p>Proceed to Doctor Room</p>`;
 }
 </script>
 
