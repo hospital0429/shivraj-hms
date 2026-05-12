@@ -3,67 +3,70 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shivraj HMS</title>
+<title>Shivraj HMS Pro</title>
 <style>
-body{font-family:Arial;background:#f4f6f9;margin:0}
-header{background:#0d6efd;color:white;padding:15px;text-align:center}
-.container{padding:20px}
-.card{background:white;padding:15px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1);margin-bottom:15px}
-input,button,select{padding:10px;margin:5px;width:100%}
-button{background:#0d6efd;color:white;border:none;cursor:pointer;border-radius:5px}
+body{font-family:Segoe UI,Arial;margin:0;background:#eef2f7}
+header{background:#0b5ed7;color:#fff;padding:15px;text-align:center}
+.container{padding:15px}
+.card{background:#fff;border-radius:12px;padding:15px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
+input,select{padding:10px;margin:5px 0;width:100%;border:1px solid #ccc;border-radius:8px}
+button{padding:10px;background:#0b5ed7;color:#fff;border:none;border-radius:8px;cursor:pointer;width:100%}
 button:hover{background:#084298}
-.nav{display:flex;gap:10px;flex-wrap:wrap}
-.nav button{flex:1}
+.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}
+.nav button{width:100%}
 .hidden{display:none}
+.badge{background:#198754;color:#fff;padding:3px 8px;border-radius:6px;font-size:12px}
+.small{font-size:13px;color:#555}
 </style>
 </head>
 <body>
 
 <header>
-<h2>Shivraj Hospital Management System</h2>
+<h2>SHIVRAJ HOSPITAL MANAGEMENT SYSTEM (PRO)</h2>
 </header>
 
 <div class="container">
 
 <!-- LOGIN -->
-<div id="loginPage" class="card">
-<h3>Login</h3>
-<input id="user" placeholder="Username" />
-<input id="pass" type="password" placeholder="Password" />
-<button onclick="login()">Login</button>
-<p id="err" style="color:red"></p>
+<div id="login" class="card">
+<h3>Secure Login</h3>
+<input id="u" placeholder="Username" />
+<input id="p" type="password" placeholder="Password" />
+<button onclick="doLogin()">Login</button>
+<p id="msg" style="color:red"></p>
 </div>
 
 <!-- DASHBOARD -->
-<div id="app" class="hidden">
+<div id="dash" class="hidden">
+
 <div class="nav">
-<button onclick="show('billing')">Billing</button>
-<button onclick="show('inventory')">Inventory</button>
-<button onclick="show('token')">OPD Token</button>
+<button onclick="openTab('bill')">Billing</button>
+<button onclick="openTab('inv')">Inventory</button>
+<button onclick="openTab('opd')">OPD Token</button>
 <button onclick="logout()">Logout</button>
 </div>
 
 <!-- BILLING -->
-<div id="billing" class="card">
+<div id="bill" class="card">
 <h3>Billing System</h3>
-<input id="pname" placeholder="Patient Name" />
-<input id="amt" type="number" placeholder="Amount" />
+<input id="bname" placeholder="Patient Name" />
+<input id="bamt" type="number" placeholder="Amount" />
 <button onclick="addBill()">Generate Bill</button>
-<div id="billList"></div>
+<div id="bills"></div>
 </div>
 
 <!-- INVENTORY -->
-<div id="inventory" class="card hidden">
-<h3>Inventory</h3>
-<input id="item" placeholder="Item Name" />
-<input id="qty" type="number" placeholder="Quantity" />
-<button onclick="addItem()">Add Stock</button>
-<div id="stockList"></div>
+<div id="inv" class="card hidden">
+<h3>Inventory Management</h3>
+<input id="iname" placeholder="Item Name" />
+<input id="iqty" type="number" placeholder="Quantity" />
+<button onclick="addStock()">Add Stock</button>
+<div id="stocks"></div>
 </div>
 
-<!-- TOKEN -->
-<div id="token" class="card hidden">
-<h3>OPD Token</h3>
+<!-- OPD -->
+<div id="opd" class="card hidden">
+<h3>OPD Token System</h3>
 <select id="dept">
 <option>GENERAL OPD</option>
 <option>ANC OPD</option>
@@ -74,65 +77,62 @@ button:hover{background:#084298}
 <option>GYNE & OBS</option>
 <option>PSYCHIATRIC</option>
 </select>
-<button onclick="generateToken()">Generate Token</button>
-<div id="tokenOut"></div>
+<button onclick="token()">Generate Token</button>
+<div id="tout"></div>
 </div>
 
 </div>
 </div>
 
 <script>
-let bills=[];
-let stock=[];
-let tokenNo=1;
+let bills = JSON.parse(localStorage.getItem('bills')||'[]');
+let stock = JSON.parse(localStorage.getItem('stock')||'[]');
+let t = 1;
 
-function login(){
-let u=document.getElementById('user').value;
-let p=document.getElementById('pass').value;
-if(u==='admin' && p==='admin'){
- document.getElementById('loginPage').classList.add('hidden');
- document.getElementById('app').classList.remove('hidden');
-}else{
- document.getElementById('err').innerText='Invalid login';
-}
+function doLogin(){
+if(u.value==='admin' && p.value==='admin'){
+login.style.display='none';
+dash.classList.remove('hidden');
+}else msg.innerText='Wrong username/password';
 }
 
 function logout(){location.reload();}
 
-function show(id){
-document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));
+function openTab(id){
+['bill','inv','opd'].forEach(x=>document.getElementById(x).classList.add('hidden'));
 document.getElementById(id).classList.remove('hidden');
 }
 
 function addBill(){
-let n=document.getElementById('pname').value;
-let a=document.getElementById('amt').value;
-bills.push({n,a});
+bills.push({n:bname.value,a:bamt.value});
+localStorage.setItem('bills',JSON.stringify(bills));
 renderBills();
 }
 
 function renderBills(){
-document.getElementById('billList').innerHTML=bills.map(b=>
-`<p>${b.n} - Rs ${b.a}</p>`).join('');
+bills=bills||[];
+document.getElementById('bills').innerHTML=
+`<h4>Bill Records</h4>`+bills.map(b=>
+`<div class='card'><b>${b.n}</b> <span class='badge'>Rs ${b.a}</span></div>`).join('');
 }
 
-function addItem(){
-let i=document.getElementById('item').value;
-let q=document.getElementById('qty').value;
-stock.push({i,q});
+function addStock(){
+stock.push({i:iname.value,q:iqty.value});
+localStorage.setItem('stock',JSON.stringify(stock));
 renderStock();
 }
 
 function renderStock(){
-document.getElementById('stockList').innerHTML=stock.map(s=>
-`<p>${s.i} - ${s.q}</p>`).join('');
+document.getElementById('stocks').innerHTML=
+stock.map(s=>`<div class='card'><b>${s.i}</b> - ${s.q}</div>`).join('');
 }
 
-function generateToken(){
-let d=document.getElementById('dept').value;
-document.getElementById('tokenOut').innerHTML=
-`<h2>Token #${tokenNo++}</h2><p>${d}</p><p>Proceed to Doctor Room</p>`;
+function token(){
+tout.innerHTML=`<div class='card'><h2>Token #${t++}</h2><p>${dept.value}</p><p class='small'>Proceed to Doctor Room</p></div>`;
 }
+
+renderBills();
+renderStock();
 </script>
 
 </body>
